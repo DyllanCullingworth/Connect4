@@ -1,40 +1,83 @@
 module Display
+  
+  def show_board
+    banner
+    game_info
 
-  # def show_board
-  #   clear
-    
-  #   row1 =   " #{@board_positions[0]} | #{@board_positions[1]} | #{@board_positions[2]} "
-  #   row2 =   " #{@board_positions[3]} | #{@board_positions[4]} | #{@board_positions[5]} "
-  #   row3 =   " #{@board_positions[6]} | #{@board_positions[7]} | #{@board_positions[8]} "
-  #   divider ="---+---+---"
-    
-  #   puts <<~HEREDOC
-  #     |=============================|
-  #     |========= CONNECT 4 =========|
-  #     |=============================|
+    (::Connect4::ROWS-1).downto(0) do |row|
+      0.upto(::Connect4::COLUMNS-1) do |col| 
+        print "| #{circle(@columns[col][row])} "
+      end
+      print "| \n"
+    end
 
-  #     #{row1}   | #{@p1.game_piece}: #{@p1.score}  (#{@p1.name})
-  #     #{divider}   | #{@p2.game_piece}: #{@p2.score}  (#{@p2.name})
-  #     #{row2}   *----------------
-  #     #{divider}
-  #     #{row3}
+    puts <<~HEREDOC
+      -----------------------------
+      | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
 
-  #   HEREDOC
-  # end
+
+    HEREDOC
+  end
+
+  def show_winner
+    show_board
+    puts winner
+    sleep(10)
+    if winner
+      puts "#{winner.name} is the winner"
+    else
+      puts "Game is a draw"
+    end
+
+    if play_again_prompt == 'Y'
+      Connect4.new(@p1, @p2).play
+    else
+      puts "Thank you for playing!"
+    end
+  end
 
   def banner
     clear
     puts <<~HEREDOC
-      |=============================|
-      |========= CONNECT 4 =========|
-      |=============================|
+      |===========================|
+      |======== CONNECT 4 ========|
+      |===========================|
 
     HEREDOC
+  end
+
+  def game_info
+    puts <<~HEREDOC
+      | Player 1 #{circle(1)}  | Player 2 #{circle(2)}  |
+      | #{display_name(@p1.name)}  | #{display_name(@p2.name)}  |
+      | Score: #{display_score(@p1.score.to_s)}  | Score: #{display_score(@p2.score.to_s)}  |
+
+    HEREDOC
+  end
+
+  def play_again_prompt
+    prompt("Would you like to play again? [Y/N]").upcase
   end
 
   def prompt(message)
     puts message
     gets.chomp
+  end
+
+  def display_name(string)
+    (string.length > 10) ? string.slice(0...10) : string.ljust(10, ' ')
+  end
+
+  def display_score(string)
+    (string.length > 3) ? string.slice(0...3) : string.ljust(3, ' ')
+  end
+
+  def circle(value)
+    circle = '\u25C9'.gsub(/\\u[\da-f]{4}/i) { |m| [m[-4..-1].to_i(16)].pack('U') }
+
+    return circle.colorize(:red)    if value == 1 
+    return circle.colorize(:yellow) if value == 2 
+    circle.colorize(:white)
   end
   
   def clear
