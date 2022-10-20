@@ -8,8 +8,6 @@ class Player
     :player_number,
     :name, 
     :score
-  
-  @@other_game_piece = ""
 
   def initialize(player_number, name: set_player_name(player_number))
     @player_number = player_number

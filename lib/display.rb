@@ -19,10 +19,9 @@ module Display
     HEREDOC
   end
 
-  def show_winner
+  def show_winner(winner)
     show_board
-    puts winner
-    sleep(10)
+
     if winner
       puts "#{winner.name} is the winner"
     else

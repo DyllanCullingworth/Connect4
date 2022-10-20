@@ -5,21 +5,21 @@ class Connect4
   include Display 
 
   attr_accessor \
-    :columns,
-    :winner
+    :columns
 
   COLUMNS = 7
   ROWS    = 6
   
   def initialize(player_1, player_2)
-    @p1             = player_1
-    @p2             = player_2
-    @winner         = nil
-    @columns        = COLUMNS.times.map { [0,0,0,0,0,0] }
+    @p1      = player_1
+    @p2      = player_2
+    @winner  = nil
+    @columns = COLUMNS.times.map { [0,0,0,0,0,0] }
   end
 
   def play
     player = @p1
+    winner = nil
 
     loop do
       show_board
@@ -47,7 +47,7 @@ class Connect4
       end 
     end 
 
-    show_winner
+    show_winner(winner)
   end
 
   def stalemate?

@@ -1,5 +1,6 @@
 require 'connect4'
 require 'player'
+require 'colorize'
 
 describe Connect4 do
 
@@ -96,6 +97,32 @@ describe Connect4 do
       
       it 'should be a stalemate' do
         expect(subject.stalemate?).to eq(true)
+      end
+    end
+  end
+
+  describe '#play' do
+    before do
+      allow_any_instance_of(Connect4).to receive(:prompt).and_return('1')
+    end
+
+    context 'player 1 wins' do
+      before do
+        allow_any_instance_of(Connect4).to receive(:player_wins?).and_return(true)
+      end
+
+      it 'updates player 1 score' do
+        expect { subject.play }.to change { p1.score }.by(1)
+      end
+    end
+
+    context 'player 2 wins' do
+      before do
+        allow_any_instance_of(Connect4).to receive(:player_wins?).and_return(false, true)
+      end
+
+      it 'updates player 2 score' do
+        expect { subject.play }.to change { p2.score }.by(1)
       end
     end
   end
