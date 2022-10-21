@@ -7,7 +7,7 @@ describe Connect4 do
   let(:p1) { Player.new(1, name: 'Dyllan') }
   let(:p2) { Player.new(2, name: 'John') }
   
-  let(:positions) do
+  let(:grid) do
     [
       [1,0,0,0,0,0],
       [0,1,0,1,1,1],
@@ -24,7 +24,7 @@ describe Connect4 do
   end
 
   before do
-    subject.columns = positions
+    subject.grid = grid
   end
 
   describe '#up' do
@@ -83,7 +83,7 @@ describe Connect4 do
     end
 
     context 'when there are no more pieces to play' do
-      let(:positions) do
+      let(:grid) do
         [
           [1,1,2,2,1,1],
           [2,2,1,2,2,2],
