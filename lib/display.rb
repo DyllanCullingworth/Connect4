@@ -6,7 +6,7 @@ module Display
 
     (::Connect4::ROWS-1).downto(0) do |row|
       0.upto(::Connect4::COLUMNS-1) do |col| 
-        print "| #{circle(@columns[col][row])} "
+        print "| #{circle(grid[col][row])} "
       end
       print "| \n"
     end

@@ -4,8 +4,7 @@ class Connect4
 
   include Display 
 
-  attr_accessor \
-    :columns
+  attr_accessor :grid
 
   COLUMNS = 7
   ROWS    = 6
@@ -14,7 +13,7 @@ class Connect4
     @p1      = player_1
     @p2      = player_2
     @winner  = nil
-    @columns = COLUMNS.times.map { [0,0,0,0,0,0] }
+    @grid    = COLUMNS.times.map { Array.new(ROWS) { 0 } }
   end
 
   def play
@@ -27,7 +26,7 @@ class Connect4
       position = prompt("#{player.name}: Choose a column")
 
       if position.match(/^[1-7]$/) 
-        column = @columns[position.to_i - 1]
+        column = grid[position.to_i - 1]
         
         if column.include?(0)
           column[column.find_index(0)] = player.player_number
@@ -51,7 +50,7 @@ class Connect4
   end
 
   def stalemate?
-    !@columns.flatten.include?(0)
+    !grid.flatten.include?(0)
   end
 
   def player_wins?(player)
@@ -59,7 +58,7 @@ class Connect4
     
     0.upto(COLUMNS-1) do |col|
       0.upto(ROWS-1) do |row|
-        if @columns[col][row] == player_number
+        if grid[col][row] == player_number
           return true if check_fields(col, row, player_number).any?
         end
       end
@@ -80,40 +79,40 @@ class Connect4
   def up(col, row, player_number)
     return false if row+3 > ROWS-1
     [
-      @columns[col][row],
-      @columns[col][row+1],
-      @columns[col][row+2],
-      @columns[col][row+3]
+      grid[col][row],
+      grid[col][row+1],
+      grid[col][row+2],
+      grid[col][row+3]
     ].map {|item| item == player_number }.all?
   end
 
   def up_right(col, row, player_number)
     return false if col+3 > COLUMNS-1 || row+3 > ROWS-1
     [
-      @columns[col][row],
-      @columns[col+1][row+1],
-      @columns[col+2][row+2],
-      @columns[col+3][row+3]
+      grid[col][row],
+      grid[col+1][row+1],
+      grid[col+2][row+2],
+      grid[col+3][row+3]
     ].map {|item| item == player_number }.all?
   end
 
   def right(col, row, player_number)
     return false if col+3 > COLUMNS-1
     [
-      @columns[col][row],
-      @columns[col+1][row],
-      @columns[col+2][row],
-      @columns[col+3][row]
+      grid[col][row],
+      grid[col+1][row],
+      grid[col+2][row],
+      grid[col+3][row]
     ].map {|item| item == player_number }.all?
   end
 
   def down_right(col, row, player_number)
     return false if col+3 > COLUMNS-1 || row-3 < 0
     [
-      @columns[col][row],
-      @columns[col+1][row-1],
-      @columns[col+2][row-2],
-      @columns[col+3][row-3]
+      grid[col][row],
+      grid[col+1][row-1],
+      grid[col+2][row-2],
+      grid[col+3][row-3]
     ].map {|item| item == player_number }.all?
   end
 
